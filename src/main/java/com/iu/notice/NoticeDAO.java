@@ -88,41 +88,42 @@ public class NoticeDAO implements BoardDAO{
 	}
 
 	@Override
-	public List<BoardDTO> selectList(BoardDTO boardDTO)  throws Exception{
-		// TODO Auto-generated method stub
-				Connection con = DBConnector.getConnect();
-				String sql =  "select * from notice order by num desc";
-				List<BoardDTO> ar = new ArrayList<BoardDTO>();
-	
-				PreparedStatement st = con.prepareStatement(sql);
-				
-				ResultSet rs = st.executeQuery();
-				
-				while(rs.next()){
-					BoardDTO boardDTO2 = new BoardDTO();
-					boardDTO2.getNum();
-					boardDTO2.getWriter();
-					boardDTO2.getTitle();
-					boardDTO2.getContents();
-					boardDTO2.getReg_date();
-					boardDTO2.getHit();
-					ar.add(boardDTO2);
-				}
-				
-				DBConnector.disConnect(st, con);
-				
-				return ar;
+	public List<BoardDTO> selectList() throws Exception {
+		List<BoardDTO> ar = new ArrayList<BoardDTO>();
+		BoardDTO boardDTO=null;
+		Connection con = DBConnector.getConnect();
+		String sql ="select * from "
+				+ "(select rownum R, N.* from "
+				+ "(select * from notice order by num desc) N) "
+				+ "where R between ? and ?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setInt(1, 1);
+		st.setInt(2, 10);
+		ResultSet rs = st.executeQuery();
+		while(rs.next()){
+			boardDTO = new BoardDTO();
+			boardDTO.setNum(rs.getInt("num"));
+			boardDTO.setWriter(rs.getString("writer"));
+			boardDTO.setTitle(rs.getString("title"));
+			boardDTO.setContents(rs.getString("contents"));
+			boardDTO.setReg_date(rs.getDate("reg_date"));
+			boardDTO.setHit(rs.getInt("hit"));
+			ar.add(boardDTO);
+		}
+		DBConnector.disConnect(rs, st, con);
+		
+		return ar;
 	}
 
 	@Override
-	public BoardDTO selectOne(int num)  throws Exception{
+	public BoardDTO selectOne()  throws Exception{
 		// TODO Auto-generated method stub
 		Connection con = DBConnector.getConnect();
 		String sql =  "select * from notice where num=?";
 		
 		BoardDTO boardDTO = null;
 		PreparedStatement st = con.prepareStatement(sql);
-		st.setInt(1, num);
+		//st.setInt(1, num);
 		
 		ResultSet rs = st.executeQuery();
 		
