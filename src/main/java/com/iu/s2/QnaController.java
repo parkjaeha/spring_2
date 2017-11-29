@@ -10,39 +10,37 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.iu.Board.BoardDTO;
 import com.iu.notice.NoticeService;
+import com.iu.qna.QnaService;
 
 @Controller
-@RequestMapping(value="/notice/*")
-public class NoticeController {
+@RequestMapping(value="/qna/*")
+public class QnaController {
 
-	private static final Logger logger = LoggerFactory.getLogger(NoticeController.class);
+private static final Logger logger = LoggerFactory.getLogger(QnaController.class);
 	
 	@Inject
-	private NoticeService noticeService = null;
+	private QnaService qnaService = null;
 	
-	@RequestMapping(value="noticeList", method=RequestMethod.GET)
-	public String selectList(Model model){
+	@RequestMapping(value="qnaList")
+	public String qnaList(Model model){
 		
-		List<BoardDTO> ar=null;
+		List<BoardDTO> ar = null;
+		
 		try {
-			ar = noticeService.selectList();
+			ar = qnaService.selectList();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		model.addAttribute("list", ar).addAttribute("board","notice");
+		model.addAttribute("list", ar).addAttribute("board","qna");
 		
-		//return "board/boardList";
 		return "board/boardList";
 	}
 	
-	
-
 	
 }

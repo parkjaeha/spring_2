@@ -1,22 +1,18 @@
-package com.iu.notice;
+package com.iu.qna;
 
 import java.util.List;
 
 import com.iu.Board.BoardDTO;
 import com.iu.Board.BoardService;
 
-public class NoticeService implements BoardService {
-	private NoticeDAO noticeDAO;
+public class QnaService implements BoardService {
+
+	QnaDAO qnaDAO = new QnaDAO();
 	
-	public void setNoticeDAO(NoticeDAO noticeDAO) {
-		this.noticeDAO = noticeDAO;
+	public void setQnaDAO(QnaDAO qnaDAO) {
+		this.qnaDAO = qnaDAO;
 	}
 
-	/*public NoticeService() {
-		// TODO Auto-generated constructor stub
-		noticeDAO = new NoticeDAO();
-	}*/
-	
 	@Override
 	public int insert(BoardDTO boardDTO) throws Exception {
 		// TODO Auto-generated method stub
@@ -43,9 +39,10 @@ public class NoticeService implements BoardService {
 
 	@Override
 	public List<BoardDTO> selectList() throws Exception {
-		//page maker code
+		// TODO Auto-generated method stub
 		
-		return noticeDAO.selectList();
+		return qnaDAO.selectList();
 	}
 
+	
 }
