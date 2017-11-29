@@ -34,8 +34,8 @@ public class QnaDAO implements BoardDAO{
 	public List<BoardDTO> selectList() throws Exception {
 		Connection con =DBConnector.getConnect();
 		String sql ="select * from "
-				+ "(select rownum R, N.* from "
-				+ "(select * from qna order by num desc) N) "
+				+ "(select rownum R, Q.* from "
+				+ "(select * from qna order by ref desc, step asc) Q) "
 				+ "where R between ? and ?";
 		PreparedStatement st = con.prepareStatement(sql);
 		st.setInt(1, 1);
