@@ -11,6 +11,11 @@ import javax.naming.spi.DirStateFactory.Result;
 import com.iu.Board.BoardDAO;
 import com.iu.Board.BoardDTO;
 import com.iu.util.DBConnector;
+import com.iu.util.ListData;
+import com.iu.util.Pager;
+import com.iu.util.RowNum;
+
+import oracle.jdbc.proxy.annotation.Pre;
 
 public class NoticeDAO implements BoardDAO{
 
@@ -18,7 +23,7 @@ public class NoticeDAO implements BoardDAO{
 	public int insert(BoardDTO boardDTO) throws Exception {
 		// TODO Auto-generated method stub
 		Connection con = DBConnector.getConnect();
-		String sql =  "insert into notice values(board_seq.nextval,?,?,?,?,?)";
+		String sql =  "insert into notice values(board_seq.nextval,?,?,?,sysdate,0)";
 		int result = 0;
 		
 		PreparedStatement st = con.prepareStatement(sql);
@@ -26,8 +31,6 @@ public class NoticeDAO implements BoardDAO{
 		st.setString(1, boardDTO.getWriter());
 		st.setString(2, boardDTO.getTitle());
 		st.setString(3, boardDTO.getContents());
-		st.setDate(4, boardDTO.getReg_date());
-		st.setInt(5, boardDTO.getHit());
 		
 		result = st.executeUpdate();
 		
@@ -88,17 +91,18 @@ public class NoticeDAO implements BoardDAO{
 	}
 
 	@Override
-	public List<BoardDTO> selectList() throws Exception {
+	public List<BoardDTO> selectList(RowNum rowNum) throws Exception {
 		List<BoardDTO> ar = new ArrayList<BoardDTO>();
 		BoardDTO boardDTO=null;
 		Connection con = DBConnector.getConnect();
 		String sql ="select * from "
 				+ "(select rownum R, N.* from "
-				+ "(select * from notice order by num desc) N) "
+				+ "(select * from notice where "+rowNum.getKind()+" like ? order by num desc) N) "
 				+ "where R between ? and ?";
 		PreparedStatement st = con.prepareStatement(sql);
-		st.setInt(1, 1);
-		st.setInt(2, 10);
+		st.setString(1, "%" + rowNum.getSearch()+"%");
+		st.setInt(2, rowNum.getStartRow());
+		st.setInt(3, rowNum.getLastRow());
 		ResultSet rs = st.executeQuery();
 		while(rs.next()){
 			boardDTO = new BoardDTO();
@@ -116,26 +120,25 @@ public class NoticeDAO implements BoardDAO{
 	}
 
 	@Override
-	public BoardDTO selectOne()  throws Exception{
+	public BoardDTO selectOne(int num) throws Exception{
 		// TODO Auto-generated method stub
 		Connection con = DBConnector.getConnect();
 		String sql =  "select * from notice where num=?";
 		
 		BoardDTO boardDTO = null;
 		PreparedStatement st = con.prepareStatement(sql);
-		//st.setInt(1, num);
+		st.setInt(1, num);
 		
 		ResultSet rs = st.executeQuery();
 		
 		if(rs.next()){
 			boardDTO = new BoardDTO();
-			boardDTO.getNum();
-			boardDTO.getWriter();
-			boardDTO.getTitle();
-			boardDTO.getContents();
-			boardDTO.getReg_date();
-			boardDTO.getHit();
-			
+			boardDTO.setNum(rs.getInt("num"));
+			boardDTO.setTitle(rs.getString("title"));
+			boardDTO.setWriter(rs.getString("writer"));
+			boardDTO.setContents(rs.getString("contents"));
+			boardDTO.setReg_date(rs.getDate("reg_date"));
+			boardDTO.setHit(rs.getInt("hit"));
 		}
 		
 		DBConnector.disConnect(st, con);
@@ -153,6 +156,23 @@ public class NoticeDAO implements BoardDAO{
 		int result = st.executeUpdate();
 		
 		DBConnector.disConnect(st, con);
+		return result;
+	}
+
+	@Override
+	public int getTotalCount(RowNum rowNum) throws Exception {
+		// TODO Auto-generated method stub
+		Connection con =DBConnector.getConnect();
+		String sql = "select nvl(count(num),0) from notice where "+rowNum.getKind()+" like ?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, "%"+rowNum.getSearch()+"%");
+		
+		ResultSet rs =  st.executeQuery();
+		rs.next();
+		int result = rs.getInt(1);
+		
+		DBConnector.disConnect(rs, st, con);
+		
 		return result;
 	}
 
