@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.iu.Board.BoardDAO;
 import com.iu.Board.BoardDTO;
 import com.iu.util.DBConnector;
@@ -14,7 +16,7 @@ import com.iu.util.ListData;
 import com.iu.util.RowNum;
 
 import oracle.jdbc.proxy.annotation.Pre;
-
+@Repository
 public class QnaDAO implements BoardDAO{
 
 	@Override
@@ -28,8 +30,7 @@ public class QnaDAO implements BoardDAO{
 		st.setString(1, boardDTO.getWriter());
 		st.setString(2, boardDTO.getTitle());
 		st.setString(3, boardDTO.getContents());
-		
-		
+			
 		result = st.executeUpdate();
 		
 		if(result>0){

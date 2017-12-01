@@ -2,6 +2,9 @@ package com.iu.qna;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.iu.Board.BoardDTO;
@@ -9,14 +12,15 @@ import com.iu.Board.BoardService;
 import com.iu.util.ListData;
 import com.iu.util.Pager;
 import com.iu.util.RowNum;
-
+@Service
 public class QnaService implements BoardService {
 
+	@Inject
 	QnaDAO qnaDAO = new QnaDAO();
 	
-	public void setQnaDAO(QnaDAO qnaDAO) {
+	/*public void setQnaDAO(QnaDAO qnaDAO) {
 		this.qnaDAO = qnaDAO;
-	}
+	}*/
 
 	@Override
 	public int insert(BoardDTO boardDTO) throws Exception {

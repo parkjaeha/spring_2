@@ -1,22 +1,22 @@
 package com.iu.notice;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.naming.spi.DirStateFactory.Result;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.iu.Board.BoardDAO;
 import com.iu.Board.BoardDTO;
 import com.iu.util.DBConnector;
-import com.iu.util.ListData;
-import com.iu.util.Pager;
 import com.iu.util.RowNum;
 
-import oracle.jdbc.proxy.annotation.Pre;
 
+@Repository
 public class NoticeDAO implements BoardDAO{
 
 	@Override

@@ -21,7 +21,6 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-<!-- contorller 만들어 줄때 사용하는 좋다. -->
 
 <!-- 	<beans:bean class="com.iu.notice.NoticeDAO" name="notiecDAO"></beans:bean>
 	<beans:bean class="com.iu.notice.NoticeService" name="noticeService">
@@ -34,7 +33,10 @@
 		<beans:property name="qnaDAO" ref="qnaDAO"></beans:property>
 	</beans:bean> -->
 	
-	<context:component-scan base-package="com.iu.s2" />
+	<context:component-scan base-package="com.iu.s2" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
 	
 	
 	

@@ -2,6 +2,11 @@ package com.iu.notice;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.iu.Board.BoardDTO;
@@ -10,13 +15,19 @@ import com.iu.util.ListData;
 import com.iu.util.Pager;
 import com.iu.util.RowNum;
 
+@Service
 public class NoticeService implements BoardService {
-	private NoticeDAO noticeDAO;
 	
-	public void setNoticeDAO(NoticeDAO noticeDAO) {
+	@Inject
+	private NoticeDAO noticeDAO;	
+	
+	
+	//setter
+	/*public void setNoticeDAO(NoticeDAO noticeDAO) {
 		this.noticeDAO = noticeDAO;
-	}
-
+	}*/
+	
+	//생성자
 	/*public NoticeService() {
 		// TODO Auto-generated constructor stub
 		noticeDAO = new NoticeDAO();
