@@ -6,6 +6,6 @@
 <bean class="com.iu.qna.QnaDAO" name="qnaDAO"></bean>
 	<bean class="com.iu.qna.QnaService" name="qnaService">
 		<property name="qnaDAO" ref="qnaDAO"></property>
-	</bean>
+</bean>
 
 </beans>
